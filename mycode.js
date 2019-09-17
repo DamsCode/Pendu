@@ -4,7 +4,11 @@
     let nblf = 0;
     let lettre = [];
     let tabwrong = [];
+
+    let limit = 5;
+
     //    let display = document.getElementById("display").innerHTML;
+    document.getElementById("rest").innerText = limit;
 
     function modifdisplay() {
         document.getElementById("display").innerHTML = "";
@@ -34,21 +38,30 @@
             pnblf == nblf &&
             tabwrong.find(e => e == lettre[lettre.length - 1]) == undefined
         ) {
-            console.log("test");
             tabwrong.push(lettre[lettre.length - 1]);
+            limit--;
+            document.getElementById("rest").innerText = limit;
             modifwrong();
         }
     }
     document.getElementById("try").addEventListener("click", () => {
-        let es = document
-            .getElementById("saisie")
-            .value.charAt(0)
-            .toUpperCase();
-        document.getElementById("saisie").value = "";
+        if (limit > 0) {
+            let es = document
+                .getElementById("saisie")
+                .value.charAt(0)
+                .toUpperCase();
+            document.getElementById("saisie").value = "";
 
-        if (isNaN(es)) {
-            lettre.push(es);
-            guessLetter();
+            if (isNaN(es)) {
+                lettre.push(es);
+                guessLetter();
+            }
+        }
+
+        if (limit == 0) {
+            tabmot.forEach(element => {
+                document.getElementById("reponse").innerText += element;
+            });
         }
     });
 })();
