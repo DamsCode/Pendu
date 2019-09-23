@@ -1,14 +1,22 @@
 (() => {
-    
-    let tabmot = ["D", "E", "V", "I", "N", "E", "R"];
-    let tabvide = ["_", "_", "_", "_", "_", "_", "_"];
+    let mot = "devin";
+    let tabmot = [];
+    let tabvide = [];
     let nblf = 0;
     let lettre = [];
     let tabwrong = [];
-
+    let nottrouve = true;
     let limit = 5;
 
-    //    let display = document.getElementById("display").innerHTML;
+    const initTab = () => {
+        for (let index = 0; index < mot.length; index++) {
+            tabmot.push(mot.charAt(index).toUpperCase());
+        }
+        for (let index = 0; index < mot.length; index++) {
+            tabvide.push("_");
+        }
+    };
+
     document.getElementById("rest").innerText = limit;
 
     function modifdisplay() {
@@ -24,6 +32,19 @@
             document.getElementById("wrong").innerHTML += `${element} `;
         });
     }
+    const felicitation = () => {
+        // alert("bravo vous avez trouvé");
+        document.getElementById("try").disabled = true;
+    };
+
+    const dommage = () => {
+        document.getElementById("try").disabled = true;
+        tabmot.forEach(element => {
+            document.getElementById("reponse").innerText += element;
+        });
+    };
+    initTab();
+
     modifdisplay();
 
     function guessLetter() {
@@ -35,6 +56,7 @@
                 nblf++;
             }
         });
+        nottrouve = tabvide.some(eleme => eleme == "_");
         if (
             pnblf == nblf &&
             tabwrong.find(e => e == lettre[lettre.length - 1]) == undefined
@@ -43,10 +65,16 @@
             limit--;
             document.getElementById("rest").innerText = limit;
             modifwrong();
+            if (limit == 0) {
+                dommage();
+            }
+        }
+        if (!nottrouve) {
+            felicitation();
         }
     }
     document.getElementById("try").addEventListener("click", () => {
-        if (limit > 0) {
+        if (nottrouve && limit > 0) {
             let es = document
                 .getElementById("saisie")
                 .value.charAt(0)
@@ -57,12 +85,6 @@
                 lettre.push(es);
                 guessLetter();
             }
-        }
-
-        if (limit == 0) {
-            tabmot.forEach(element => {
-                document.getElementById("reponse").innerText += element;
-            });
         }
     });
 })();
